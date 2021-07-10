@@ -30,19 +30,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  if (req.headers.origin) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'X-Requested-With,Content-Type,Authorization'
-    );
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
-    if (req.method === 'OPTIONS') return res.sendStatus(200);
-  }
-  return next();
-});
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -56,13 +43,13 @@ app.use(xss());
 app.use(hpp());
 
 // Allow cors
-var corOptions = {
+var corsOption = {
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
   optionsSuccessStatus: 200,
 };
-app.use(cors(corOptions));
+app.use(cors(corsOption));
 
 // show version on home route
 app.get('/', (req, res) => {
