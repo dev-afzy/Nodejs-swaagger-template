@@ -4,6 +4,9 @@ const express = require('express');
 const debug = require('debug')('todo-api:app');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
+const cors = require('cors');
 const routes = require('./routes');
 const pjson = require('./package.json');
 const Constant = require('./utilities/constant');
@@ -11,7 +14,9 @@ const Constant = require('./utilities/constant');
 const app = express();
 require('express-async-errors');
 
+// App security header
 app.use(helmet());
+
 const sixtyDaysInSeconds = 5184000;
 app.use(
   helmet.hsts({
@@ -19,7 +24,6 @@ app.use(
   })
 );
 
-// Sets "Referrer-Policy: origin,"
 app.use(
   helmet.referrerPolicy({
     policy: 'origin',
@@ -42,8 +46,23 @@ app.use((req, res, next) => {
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// To remove data, use:
+// sanitize data
 app.use(mongoSanitize());
+
+// Prevent XSS attacks
+app.use(xss());
+
+// Prevent HTTP parameter Pollution attacks
+app.use(hpp());
+
+// Allow cors
+var corOptions = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corOptions));
 
 // show version on home route
 app.get('/', (req, res) => {
