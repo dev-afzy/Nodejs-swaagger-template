@@ -4,7 +4,4 @@ const labelList = {
   invalidInput: 'Invalid input',
 };
 
-const reference = {
-  category: ['children'],
-};
-module.exports = { labelList, reference };
+module.exports = { labelList };

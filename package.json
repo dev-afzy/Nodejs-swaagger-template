@@ -1,5 +1,5 @@
 {
-  "name": "product-api",
+  "name": "todo-api",
   "version": "1.0.0",
   "description": "product nodejs api",
   "main": "app.js",
@@ -34,5 +34,8 @@
     "helmet": "^3.23.3",
     "mongoose": "^5.9.25",
     "mongoose-url-slugs": "^1.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^9.0.2"
   }
 }

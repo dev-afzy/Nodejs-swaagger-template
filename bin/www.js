@@ -5,7 +5,7 @@
  */
 require('dotenv').config();
 const http = require('http');
-const debug = require('debug')('product-api:server');
+const debug = require('debug')('todo-api:server');
 
 const app = require('../app');
 

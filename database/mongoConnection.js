@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const debug = require('debug')('product-api:database');
+const debug = require('debug')('todo-api:database');
 const config = require('../config/config');
 
 const dbOpts = {

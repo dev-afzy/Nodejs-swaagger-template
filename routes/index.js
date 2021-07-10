@@ -2,10 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 router.get('/', (req, res) => {
-  res.send('PRODUCT API Version 1');
+  res.send('TODO API Version 1');
 });
 
-router.use('/main-category', require('./category.routes'));
+router.use('/todo', require('./todo.routes'));
 
 router.use((err, req, res) => {
   if (err)
