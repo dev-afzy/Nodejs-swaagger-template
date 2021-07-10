@@ -1,2 +1,2 @@
 # Nodejs-swaagger-template
-Node js and MongoDB with swagger Documentation
+Node js and MongoDB with swagger and Postman Documentation
