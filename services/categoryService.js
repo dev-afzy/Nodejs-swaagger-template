@@ -12,18 +12,26 @@ class CategoryService extends ReferenceModelService {
     const parentcategory = await this.Model.findById(data.parent);
     if (parentcategory) {
       delete data.parent;
-      return parentcategory.addChild(data);
+      parentcategory
+        .addChild(data)
+        .then((result) => result)
+        .catch((err) => err);
     }
 
     const model = new this.Model(data);
-    return model.save();
+    model
+      .save()
+      .then((result) => result)
+      .catch((err) => err);
   }
 
   getAllCategory() {
-    return this.Model.find()
+    this.Model.find()
       .sort({ parent: 1 })
       .populate(this.reference)
-      .exec();
+      .exec()
+      .then((result) => result)
+      .catch((err) => err);
   }
 
   getCategoryWithCount() {
@@ -49,11 +57,14 @@ class CategoryService extends ReferenceModelService {
       },
     ];
 
-    return this.productModel.aggregate(aggrgagateQuery);
+    this.productModel
+      .aggregate(aggrgagateQuery)
+      .then((result) => result)
+      .catch((err) => err);
   }
 
   getSubCategory(slug) {
-    return this.Model.findOne({
+    this.Model.findOne({
       slug,
     })
       .populate({
@@ -64,7 +75,9 @@ class CategoryService extends ReferenceModelService {
           select: ['name', 'children', 'slug'],
         },
       })
-      .exec();
+      .exec()
+      .then((result) => result)
+      .catch((err) => err);
   }
 }
 

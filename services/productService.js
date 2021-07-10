@@ -31,7 +31,10 @@ class ProductService extends ReferenceModelService {
       },
     ];
 
-    return this.productModel.aggregate(aggrgagateQuery);
+    this.productModel
+      .aggregate(aggrgagateQuery)
+      .then((result) => result)
+      .catch((err) => err);
   }
 
   async getProductBycategory(slug) {
@@ -55,24 +58,25 @@ class ProductService extends ReferenceModelService {
         mongoose.Types.ObjectId(child._id)
       );
       catogeryList.push(mongoose.Types.ObjectId(category._id));
-      return this.productModel.aggregate([
-        {
-          $match: {
-            categories: {
-              $in: catogeryList,
+      this.productModel
+        .aggregate([
+          {
+            $match: {
+              categories: {
+                $in: catogeryList,
+              },
             },
           },
-        },
-        {
-          $group: {
-            _id: category._id,
-            products: { $push: '$$ROOT' },
-            count: { $sum: 1 },
+          {
+            $group: {
+              _id: category._id,
+              products: { $push: '$$ROOT' },
+              count: { $sum: 1 },
+            },
           },
-        },
-      ]);
-      // const { count, products } = product[0];
-      // return product;
+        ])
+        .then((result) => result)
+        .catch((err) => err);
     } else {
       return {
         status: true,

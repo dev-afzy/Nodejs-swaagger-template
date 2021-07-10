@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
-const httpContext = require('express-http-context');
 const createError = require('http-errors');
 const express = require('express');
 const debug = require('debug')('product-api:app');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
 const routes = require('./routes');
 const pjson = require('./package.json');
 const Constant = require('./utilities/constant');
@@ -18,17 +18,15 @@ app.use(
     maxAge: sixtyDaysInSeconds,
   })
 );
-app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
 
-app.use(express.urlencoded({ extended: false }));
-app.disable('x-powered-by');
-app.use(httpContext.middleware);
+// Sets "Referrer-Policy: origin,"
+app.use(
+  helmet.referrerPolicy({
+    policy: 'origin',
+  })
+);
 
 app.use((req, res, next) => {
-  httpContext.ns.bindEmitter(req);
-  httpContext.ns.bindEmitter(res);
-  const requestId = req.headers['kong-request-id'];
-  httpContext.set('requestId', requestId);
   if (req.headers.origin) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
@@ -41,7 +39,11 @@ app.use((req, res, next) => {
   return next();
 });
 
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// To remove data, use:
+app.use(mongoSanitize());
 
 // show version on home route
 app.get('/', (req, res) => {
@@ -59,11 +61,11 @@ app.use((err, req, res, next) => {
   debug(`error: ${err} ${err.statusCode}`);
   let errorResponse;
   if (err.name) {
-    const code = err.statusCode ? err.statusCode : 500;
+    const code = err?.statusCode ? err.statusCode : 500;
     if (err.statusCode) {
       errorResponse = {
         status: false,
-        error: err.message,
+        error: err?.message,
         code,
       };
     } else {

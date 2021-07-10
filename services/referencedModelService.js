@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-class ReferenceModelService  {
+class ReferenceModelService {
   constructor(model, reference) {
     this.reference = reference;
     this.Model = model;
@@ -19,14 +19,14 @@ class ReferenceModelService  {
     } else {
       refResultobject = resultObject;
     }
-    console.log(obj);
-    const result = await refResultobject
+    refResultobject
       .skip(skip)
       .limit(parseInt(obj.pageSize, 10))
       .sort({
         [obj.sortColumn]: parseInt(obj.sortValue, 10),
-      });
-    return result;
+      })
+      .then((data) => data)
+      .catch((err) => err);
   }
 
   // Get count of total documents
@@ -38,7 +38,15 @@ class ReferenceModelService  {
   // Save Date
   async save(data) {
     const model = new this.Model(data);
-    return model.save();
+
+    model
+      .save()
+      .then((saveData) => {
+        return saveData;
+      })
+      .catch((error) => {
+        return error;
+      });
   }
 }
 module.exports = ReferenceModelService;

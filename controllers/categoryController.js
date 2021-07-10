@@ -9,7 +9,6 @@
  * GET     /api/category/:id          ->  show
  */
 
-const httpContext = require('express-http-context');
 const debug = require('debug')('product-api:controllers/main-category');
 require('express-async-errors');
 const CategoryService = require('../services/categoryService');
@@ -27,10 +26,7 @@ const categoryApi = {
     if (res.data) {
       return next();
     }
-    debug(
-      'Error occured while saving category data',
-      httpContext.get('requestId')
-    );
+    debug('Error occured while saving category data');
     throw new Error();
   },
 
@@ -40,10 +36,7 @@ const categoryApi = {
       res.data = categoryRes;
       return next();
     } else {
-      debug(
-        'Error occured while fetching perticular category',
-        httpContext.get('requestId')
-      );
+      debug('Error occured while fetching perticular category');
     }
   },
 
@@ -57,13 +50,10 @@ const categoryApi = {
       res.data = response;
       return next();
     } else {
-      debug(
-        'Error occured while fetching all category',
-        httpContext.get('requestId')
-      );
+      debug('Error occured while fetching all category');
       throw new Error();
     }
-  }
+  },
 };
 
 module.exports = categoryApi;

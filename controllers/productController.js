@@ -9,7 +9,6 @@
  * GET     /api/product/:slug        ->  show
  */
 
-const httpContext = require('express-http-context');
 const debug = require('debug')('product-api:controllers/main-product');
 require('express-async-errors');
 const ProductService = require('../services/productService');
@@ -24,10 +23,7 @@ const productApi = {
     if (res.data) {
       return next();
     }
-    debug(
-      'Error occured while saving product data',
-      httpContext.get('requestId')
-    );
+    debug('Error occured while saving product data');
     throw new Error();
   },
 
@@ -44,10 +40,7 @@ const productApi = {
       }
       return next();
     } else {
-      debug(
-        'Error occured while fetching perticular product',
-        httpContext.get('requestId')
-      );
+      debug('Error occured while fetching perticular product');
     }
   },
 
@@ -64,10 +57,7 @@ const productApi = {
       res.data = response;
       return next();
     } else {
-      debug(
-        'Error occured while fetching all product',
-        httpContext.get('requestId')
-      );
+      debug('Error occured while fetching all product');
       throw new Error();
     }
   },

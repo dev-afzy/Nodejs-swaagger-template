@@ -8,29 +8,18 @@ const http = require('http');
 const debug = require('debug')('product-api:server');
 
 const app = require('../app');
+
+/**
+ * Importing DB requirments
+ */
 const connectDb = require('../database/mongoConnection');
 
 let port = '36200';
 
 /**
  * Normalize a port into a number, string, or false.
+ * @param {number} port
  */
-
-const normalizePort = (val) => {
-  port = parseInt(val, 10);
-
-  if (Number.isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-};
 
 /**
  * Event listener for HTTP server "error" event.
@@ -41,16 +30,14 @@ const onError = (error) => {
     throw error;
   }
 
-  const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
-
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      debug(`${bind} requires elevated privileges`);
+      debug(`Port ${port} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      debug(`${bind} is already in use`);
+      debug(`Port ${port} is already in use`);
       process.exit(1);
       break;
     default:
@@ -62,31 +49,20 @@ const onError = (error) => {
  * Get port from environment and store in Express.
  */
 
-port = normalizePort(process.env.PORT || '3000');
+port = process.env.PORT || '3000';
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
-
 const server = http.createServer(app);
-app.use((req, res, next) => {
-  if (req.headers.origin) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'X-Requested-With,Content-Type,Authorization'
-    );
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
-    if (req.method === 'OPTIONS') return res.send(200);
-  }
-  return next();
-});
 
+/**
+ * Listen to the port
+ */
 const onListening = () => {
   const addr = server.address();
-  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-  debug(`Listening on ${bind}`);
+  debug(`Listening on port ${addr.port}`);
 };
 
 /**
