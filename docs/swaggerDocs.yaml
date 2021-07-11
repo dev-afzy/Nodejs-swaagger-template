@@ -1,0 +1,147 @@
+swagger: '2.0'
+info:
+  description: 'This is a sample TODO server.'
+  version: '1.0.0'
+  title: 'Todo'
+  license:
+    name: 'MIT'
+    url: 'https://github.com/dev-afzy/Nodejs-swaagger-template/tree/todo'
+host: 'localhost:3002'
+basePath: '/api/v1'
+tags:
+  - name: 'Todo'
+    description: 'Everything about your TODO'
+schemes:
+  - 'http'
+paths:
+  /todo:
+    post:
+      tags:
+        - 'Todo'
+      summary: 'Add a new todo list'
+      description: 'Add new todo list to DB'
+      operationId: 'addTodo'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          required: true
+          description: 'New todo object needs to be added, It must contain name within the object'
+          schema:
+            $ref: '#/definitions/Todo'
+      responses:
+        '201':
+          description: 'successful Created new todo'
+        '405':
+          description: 'Invalid input'
+    get:
+      tags:
+        - 'Todo'
+      summary: 'Get all todos'
+      description: 'List all todos in the DB'
+      operationId: 'getTodos'
+      consumes:
+        - 'application/json'
+      responses:
+        '200':
+          description: 'Successfull operation'
+        '404':
+          description: 'Todo not found'
+  /todo/{slug}:
+    get:
+      tags:
+        - 'Todo'
+      summary: 'Find todo by slug'
+      description: 'Returns a single todo list'
+      operationId: 'getTodoBySlug'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'slug'
+          in: 'path'
+          example: 'todo-3'
+          description: 'slug of todo to return'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'successful operation'
+        '500':
+          description: 'Invalid slug'
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'Pet not found'
+  /todo/{id}:
+    put:
+      tags:
+        - 'Todo'
+      summary: 'Update an existing todo'
+      description: ''
+      operationId: 'updateTodo'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'id'
+          in: 'path'
+          description: 'Todo id to Update'
+          required: true
+          type: 'string'
+        - in: 'body'
+          name: 'body'
+          description: 'todo object that needs to be added'
+          required: true
+          schema:
+            $ref: '#/definitions/Todo'
+      responses:
+        '200':
+          description: 'Operation successful'
+        '500':
+          description: 'Invalid input'
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'Pet not found'
+        '405':
+          description: 'Validation exception'
+    delete:
+      tags:
+        - 'Todo'
+      summary: 'Deletes a todo'
+      description: ''
+      operationId: 'deleteTodo'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'id'
+          in: 'path'
+          description: 'Todo id to delete'
+          required: true
+          type: 'string'
+      responses:
+        '500':
+          description: 'Invalid input'
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'Pet not found'
+definitions:
+  Todo:
+    type: 'object'
+    required:
+      - 'name'
+    properties:
+      name:
+        type: 'string'
+        example: 'Todo 1'
+      description:
+        type: 'string'
+        example: 'This is the todo 1'
+      active:
+        type: 'boolean'
+        default: true

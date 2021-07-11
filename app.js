@@ -7,15 +7,25 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cors = require('cors');
+const morgan = require('morgan');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 const routes = require('./routes');
 const pjson = require('./package.json');
 const Constant = require('./utilities/constant');
+const swaggerDocument = YAML.load('./docs/swaggerDocs.yaml');
 
 const app = express();
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 require('express-async-errors');
 
 // App security header
 app.use(helmet());
+
+// HTTP request logger
+app.use(morgan('dev'));
 
 const sixtyDaysInSeconds = 5184000;
 app.use(

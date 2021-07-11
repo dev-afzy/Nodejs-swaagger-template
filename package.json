@@ -37,7 +37,11 @@
     "hpp": "^0.2.3",
     "mongoose": "^5.9.25",
     "mongoose-url-slugs": "^1.0.2",
-    "xss-clean": "^0.1.1"
+    "morgan": "^1.10.0",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6",
+    "xss-clean": "^0.1.1",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "mocha": "^9.0.2"

@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+var { ObjectId } = mongoose.Types;
 class ModelService {
   constructor(model) {
     this.Model = model;
@@ -52,7 +54,11 @@ class ModelService {
    * @return {object}
    * */
   updateOne(data, id) {
-    return this.Model.updateOne({ _id: id }, { $set: { data } })
+    console.log(id, data);
+    return this.Model.updateOne(
+      { _id: mongoose.Types.ObjectId(id) },
+      { $set: data }
+    )
       .then((result) => result)
       .catch((err) => err);
   }
